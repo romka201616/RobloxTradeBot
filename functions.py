@@ -12,8 +12,10 @@ import time
 import pydirectinput
 import mouse
 import easyocr
-import threading
 import webbrowser
+
+def joinServer(link):
+    webbrowser.open(link, new=2)
 
 #Take screanshot and get cliendName
 def getTradeSenderName():
@@ -340,21 +342,3 @@ def saveSuccessfullTrade():
     screen = np.array(ImageGrab.grab(bbox=(420, 320, 1500, 800)))
     cv2.imwrite(r'D:\pets\screen.png', screen)
 
-def tmp(stop_event):
-    while not stop_event.is_set():
-        time.sleep(1)
-        print("go")
-    print("Tmp thread stopped.")
-
-def timer1(sec):
-    stop_event = threading.Event()
-    threading.Timer(sec, stop_event.set).start()
-    print(f"Timer set for {sec} seconds.")
-    tmp_thread = threading.Thread(target=tmp, args=(stop_event,), name="Tmp")
-    tmp_thread.start()
-    tmp_thread.join()
-    print("Timer thread stopped.")
-
-timer_thread = threading.Thread(target=timer1, args=(3,), name="Timer")
-timer_thread.start()
-timer_thread.join()
