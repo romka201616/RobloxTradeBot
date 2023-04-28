@@ -1,3 +1,5 @@
+import time
+
 import functions
 import multiprocessing
 
@@ -12,16 +14,23 @@ def getItemsFromUser(username):
     functions.writeInChat("your verification code - b16h73d28")
     functions.closeChat()
     functions.searchItemForSell()
+    time.sleep(1)
     if functions.checkTrade():
-        print()
+        functions.finishTrade()
+        time.sleep(4)
+        functions.closeApplication()
+        time.sleep(0.5)
+        functions.removeFriend(username)
+        return True
     else:
-        return
+        functions.closeApplication()
+        return False
 
 
 def main():
     p = multiprocessing.Process(target=getItemsFromUser, args=("Romka201616",))
     p.start()
-    p.join(15)  # Timer in brackets
+    p.join(10 * 60)  # Timer in brackets
 
     if p.is_alive():
         p.terminate()

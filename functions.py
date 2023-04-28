@@ -138,8 +138,8 @@ def searchItemForSell():
     pydirectinput.click()
 
 def openChat():
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\chat.png')
-    while not start:
+    start = None
+    while start is None:
         start = pyautogui.locateCenterOnScreen(r'D:\pets\chat.png')
     time.sleep(0.25)
     pydirectinput.moveTo(start[0], start[1])
@@ -147,7 +147,9 @@ def openChat():
     pydirectinput.click()
 
 def writeInChat(verificationCode):
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\writeChat.png')
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r'D:\pets\writeChat.png')
     time.sleep(0.25)
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 10)
@@ -168,7 +170,7 @@ def closeChat():
 def checkTrade():
     emptyTrade = pyautogui.locateCenterOnScreen(r'D:\pets\emptyTrade.png')
     if emptyTrade is None:
-        pyautogui.hotkey("altleft", "f4")
+        closeApplication()
         return False
     return True
 
@@ -180,9 +182,10 @@ def givePets():
         print("successfull trade")
 
 def sendTrade(name):
-    time.sleep(2)
     filename = r'D:\pets\name.png'
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 20)
     pydirectinput.click()
@@ -251,7 +254,6 @@ def findClient(name, filename):
         mult -= 1
 
 def searchItemForSell(petName):
-    time.sleep(2)
     count = 0
     text = ""
     x, y = 500, 350
@@ -321,6 +323,8 @@ def acceptFriendRequest(username):
                 count = 0
     pydirectinput.moveTo(x+110, y+145)
     pydirectinput.click()
+    time.sleep(1)
+    closeApplication()
 
 def saveSuccessfullTrade():
     start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
@@ -342,3 +346,48 @@ def saveSuccessfullTrade():
     screen = np.array(ImageGrab.grab(bbox=(420, 320, 1500, 800)))
     cv2.imwrite(r'D:\pets\screen.png', screen)
 
+def finishTrade():
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\ready.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 10)
+    pydirectinput.click()
+
+def removeFriend(username):
+    webbrowser.open(r'https://www.roblox.com/users/friends#!/friends', new=2)
+    time.sleep(3)
+    count = 0
+    text = ""
+    username2 = username.replace("l", "I").lower()
+    username3 = username.replace("B", "D").lower()
+    username = username.lower()
+    x, y = 595, 300
+    while text != username and text != username2 and text != username3:
+        count += 1
+        pydirectinput.moveTo(x, y)
+        time.sleep(0.25)
+        os.chdir(r"C:\Users\miron")
+        filename = r'D:\pets\tmp1.png'
+        time.sleep(0.1)
+        screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 210, y + 200)))
+        cv2.imwrite(filename, screen)
+        text = ""
+        img2 = Image.open(rf"D:\pets\tmp1.png")
+        img2.save(rf"D:\pets\tmp2.png")
+        img = cv2.imread(rf"D:\pets\tmp2.png")
+        reader = easyocr.Reader(["en"])
+        text = reader.readtext(img, detail=0)
+        text = text[1].replace("@", "").lower()
+        print(text)
+        if text != username and text != username2 and text != username3:
+            x += 323
+            if count % 3 == 0:
+                x = 595
+                y += 138
+            if count == 12:
+                x, y = 595, 300
+                count = 0
+    pydirectinput.moveTo(x + 110, y + 145)
+    pydirectinput.click()
+
+def closeApplication():
+    pyautogui.hotkey("altleft", "f4")
