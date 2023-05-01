@@ -298,7 +298,6 @@ def acceptFriendRequest(username):
     x, y = 595, 300
     while text != username and text != username2 and text != username3:
         count += 1
-        pydirectinput.moveTo(x, y)
         time.sleep(0.25)
         os.chdir(r"C:\Users\miron")
         filename = r'D:\pets\tmp1.png'
@@ -363,7 +362,6 @@ def removeFriend(username):
     x, y = 595, 300
     while text != username and text != username2 and text != username3:
         count += 1
-        pydirectinput.moveTo(x, y)
         time.sleep(0.25)
         os.chdir(r"C:\Users\miron")
         filename = r'D:\pets\tmp1.png'

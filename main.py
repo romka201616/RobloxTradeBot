@@ -1,5 +1,4 @@
 import time
-
 import functions
 import multiprocessing
 
@@ -30,7 +29,7 @@ def getItemsFromUser(username):
 def main():
     p = multiprocessing.Process(target=getItemsFromUser, args=("Romka201616",))
     p.start()
-    p.join(10 * 60)  # Timer in brackets
+    p.join(10 * 60)  # Timer in brackets, minute multiplied by seconds
 
     if p.is_alive():
         p.terminate()
