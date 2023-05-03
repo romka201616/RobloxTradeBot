@@ -1,4 +1,4 @@
 host = "localhost"
-user = "root"
-password = "root"
-db_name = "orders-bd"
+user = "postgres"
+password = "1234"
+db_name = "online_store"

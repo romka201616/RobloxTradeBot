@@ -4,16 +4,83 @@ import cv2
 import pytesseract
 from PIL import Image
 import os
-import pymysql
 from config import host, user, password, db_name
-import pymysql.cursors
 import pyautogui
 import time
 import pydirectinput
 import mouse
 import easyocr
 import webbrowser
+import psycopg2
 
+def getNameFromDB():
+    try:
+        # connect to exist database
+        connection = psycopg2.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=db_name
+        )
+        connection.autocommit = True
+
+        # the cursor for perfoming database operations
+        # cursor = connection.cursor()
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT * FROM public.test ORDER BY id ASC;"
+            )
+            result = cursor.fetchone()
+            print(f"One: {result}")
+            print()
+
+        # create a new table
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         """CREATE TABLE users(
+        #             id serial PRIMARY KEY,
+        #             first_name varchar(50) NOT NULL,
+        #             nick_name varchar(50) NOT NULL);"""
+        #     )
+
+        #     # connection.commit()
+        #     print("[INFO] Table created successfully")
+
+        # insert data into a table
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         """INSERT INTO users (first_name, nick_name) VALUES
+        #         ('Oleg', 'barracuda');"""
+        #     )
+
+        #     print("[INFO] Data was succefully inserted")
+
+        # get data from a table
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         """SELECT nick_name FROM users WHERE first_name = 'Oleg';"""
+        #     )
+
+        #     print(cursor.fetchone())
+
+        # delete a table
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         """DROP TABLE users;"""
+        #     )
+
+        #     print("[INFO] Table was deleted")
+
+    except Exception as _ex:
+        print("[INFO] Error while working with PostgreSQL", _ex)
+    finally:
+        if connection:
+            # cursor.close()
+            connection.close()
+            print("[INFO] PostgreSQL connection closed")
+
+getNameFromDB()
 def joinServer(link):
     webbrowser.open(link, new=2)
 
@@ -62,57 +129,6 @@ def getTradeSenderName():
     print(clientName)
 
     return clientName
-
-#Func for test
-def acceptTrade(cliendNameFromDB, cliendName):
-    if cliendNameFromDB == cliendName:
-        print("Successful :)")
-        visitToAccept()
-        givePets()
-    else:
-        print("Scam trade sender >:(")
-
-#Get trade
-def getClientName():
-    try:
-        connection = pymysql.connect(
-            host=host,
-            port=3306,
-            user=user,
-            password=password,
-            database=db_name,
-            cursorclass=pymysql.cursors.DictCursor
-        )
-        print("successfully connected...")
-        print("#" * 20)
-
-        try:
-            # select all data from table
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM `users` LIMIT 1")
-                # cursor.execute("SELECT * FROM `users`")
-                result = cursor.fetchall()
-                if result:
-                    clientNameDB = result[0]
-                    print(f"Client name: {clientNameDB}")
-                else:
-                    print("No rows found")
-                print("#" * 20)
-
-            # delete data
-            # with connection.cursor() as cursor:
-                delete_query = "DELETE FROM `users` WHERE clientName = clientNameDB"
-                cursor.execute(delete_query)
-                connection.commit()
-
-        finally:
-            connection.close()
-
-
-    except Exception as ex:
-        print("Connection refused...")
-        print(ex)
-    return clientNameDB['name']
 
 def visitToAccept():
     while True:
@@ -252,6 +268,40 @@ def findClient(name, filename):
             time.sleep(0.25)
             mouse.wheel(-2)
         mult -= 1
+
+def searchItemForBuy(petName):
+    count = 0
+    text = ""
+    x, y = 500, 350
+    while text != petName:
+        count+=1
+        pydirectinput.moveTo(x, y)
+        pydirectinput.move(0, 10)
+        time.sleep(0.25)
+        os.chdir(r"C:\Users\miron")
+        filename = r'D:\pets\tmp1.png'
+        time.sleep(0.1)
+        screen = np.array(ImageGrab.grab(bbox=(x+15, y+20, x+250, y+250)))
+        cv2.imwrite(filename, screen)
+        text = ""
+        img2 = Image.open(rf"D:\pets\tmp1.png")
+        img2.save(rf"D:\pets\tmp2.png")
+        reader = easyocr.Reader(["en"])
+        while len(text) < 3:
+            img = cv2.imread(rf"D:\pets\tmp2.png")
+            text = reader.readtext(img, detail=0)
+            while text.count('') != 0:
+                text.remove('')
+            img2 = img2.crop((0, 0, img2.width//1.2, img2.height//1.2))
+            img2.save(rf"D:\pets\tmp2.png")
+        text = "\n".join(text)
+        print(text)
+        x += 100
+        if count % 4 == 0:
+            x = 500
+            y += 100
+        if count == 12:
+            break
 
 def searchItemForSell(petName):
     count = 0
