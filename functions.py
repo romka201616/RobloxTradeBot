@@ -13,9 +13,8 @@ import easyocr
 import webbrowser
 import psycopg2
 
-def getNameFromDB():
+def getPetsFromDB(botName):
     try:
-        # connect to exist database
         connection = psycopg2.connect(
             host=host,
             user=user,
@@ -24,53 +23,14 @@ def getNameFromDB():
         )
         connection.autocommit = True
 
-        # the cursor for perfoming database operations
-        # cursor = connection.cursor()
-
         with connection.cursor() as cursor:
             cursor.execute(
-                "SELECT * FROM public.test ORDER BY id ASC;"
+                """SELECT pet, rarity, type FROM public.order_list WHERE bot = %s""",
+                (botName,)
             )
-            result = cursor.fetchone()
-            print(f"One: {result}")
-            print()
-
-        # create a new table
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """CREATE TABLE users(
-        #             id serial PRIMARY KEY,
-        #             first_name varchar(50) NOT NULL,
-        #             nick_name varchar(50) NOT NULL);"""
-        #     )
-
-        #     # connection.commit()
-        #     print("[INFO] Table created successfully")
-
-        # insert data into a table
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """INSERT INTO users (first_name, nick_name) VALUES
-        #         ('Oleg', 'barracuda');"""
-        #     )
-
-        #     print("[INFO] Data was succefully inserted")
-
-        # get data from a table
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """SELECT nick_name FROM users WHERE first_name = 'Oleg';"""
-        #     )
-
-        #     print(cursor.fetchone())
-
-        # delete a table
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """DROP TABLE users;"""
-        #     )
-
-        #     print("[INFO] Table was deleted")
+            result = cursor.fetchall()
+            print(f"Result: {result}")
+            return result
 
     except Exception as _ex:
         print("[INFO] Error while working with PostgreSQL", _ex)
@@ -80,7 +40,6 @@ def getNameFromDB():
             connection.close()
             print("[INFO] PostgreSQL connection closed")
 
-getNameFromDB()
 def joinServer(link):
     webbrowser.open(link, new=2)
 
@@ -139,19 +98,6 @@ def visitToAccept():
             pydirectinput.move(0, 20)
             pydirectinput.click()
             break
-
-def searchItemForSell():
-    time.sleep(3)
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\pet3.png')
-    while start is None:
-        pydirectinput.moveTo(900, 500)
-        pydirectinput.move(0, 20)
-        mouse.wheel(-5)
-        start = pyautogui.locateCenterOnScreen(r'D:\pets\pet3.png')
-    time.sleep(0.25)
-    pydirectinput.moveTo(start[0], start[1])
-    pydirectinput.move(0, 20)
-    pydirectinput.click()
 
 def openChat():
     start = None
@@ -269,45 +215,15 @@ def findClient(name, filename):
             mouse.wheel(-2)
         mult -= 1
 
-def searchItemForBuy(petName):
+def chooseItemsForSell(petList):
     count = 0
     text = ""
     x, y = 500, 350
-    while text != petName:
-        count+=1
-        pydirectinput.moveTo(x, y)
-        pydirectinput.move(0, 10)
-        time.sleep(0.25)
-        os.chdir(r"C:\Users\miron")
-        filename = r'D:\pets\tmp1.png'
-        time.sleep(0.1)
-        screen = np.array(ImageGrab.grab(bbox=(x+15, y+20, x+250, y+250)))
-        cv2.imwrite(filename, screen)
-        text = ""
-        img2 = Image.open(rf"D:\pets\tmp1.png")
-        img2.save(rf"D:\pets\tmp2.png")
-        reader = easyocr.Reader(["en"])
-        while len(text) < 3:
-            img = cv2.imread(rf"D:\pets\tmp2.png")
-            text = reader.readtext(img, detail=0)
-            while text.count('') != 0:
-                text.remove('')
-            img2 = img2.crop((0, 0, img2.width//1.2, img2.height//1.2))
-            img2.save(rf"D:\pets\tmp2.png")
-        text = "\n".join(text)
-        print(text)
-        x += 100
-        if count % 4 == 0:
-            x = 500
-            y += 100
-        if count == 12:
-            break
+    rarityList = [("basic", "dasic"), ("rare"), ("epic"), ("legen"), ("myth"), ("secret"), ("excl"), ("event")]
+    typeList = [("reg"), ("gold", "geld"), ("dark"), ("rain")]
+    tmp = list(petList)
 
-def searchItemForSell(petName):
-    count = 0
-    text = ""
-    x, y = 500, 350
-    while text != petName:
+    while len(petList) != 0:
         count+=1
         pydirectinput.moveTo(x, y)
         pydirectinput.move(0, 10)
@@ -328,8 +244,25 @@ def searchItemForSell(petName):
                 text.remove('')
             img2 = img2.crop((0, 0, img2.width//1.2, img2.height//1.2))
             img2.save(rf"D:\pets\tmp2.png")
-        text = "\n".join(text)
+        text = ("\n".join(text)).lower()
         print(text)
+
+        deleted = False
+        for pet in tmp:
+            if text.find(pet[0].lowercase) != -1:
+                for rar in rarityList[pet[1] - 1]:
+                    if text.replace(pet[0].lower(), "").find(rar):
+                        for typ in typeList[pet[2] - 1]:
+                            if text.replace(pet[0].lower(), "").find(typ):
+                                pydirectinput.move(0, 10)
+                                pydirectinput.click()
+                                petList.remove(pet)
+                                deleted = True
+                                break
+                        if deleted:
+                            deleted = False
+                            break
+
         x += 100
         if count % 4 == 0:
             x = 500
