@@ -143,33 +143,6 @@ def givePets():
     if checkTrade():
         print("successfull trade")
 
-def sendTrade(name):
-    filename = r'D:\pets\name.png'
-    start = None
-    while start is None:
-        start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
-    pydirectinput.moveTo(start[0], start[1])
-    pydirectinput.move(0, 20)
-    pydirectinput.click()
-    time.sleep(0.5)
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\trade.png')
-    pydirectinput.moveTo(start[0], start[1])
-    pydirectinput.move(0, 20)
-    pydirectinput.click()
-    findClient(name, filename)
-    time.sleep(1)
-    mult = findClient(name, filename)
-    print(mult)
-    pydirectinput.moveTo(850, 310+100*mult)
-    pydirectinput.move(0, 20)
-    time.sleep(0.25)
-    pydirectinput.click()
-    time.sleep(1)
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\ok2.png')
-    pydirectinput.moveTo(start[0], start[1])
-    pydirectinput.move(0, 20)
-    pydirectinput.click()
-
 def findClient(name, filename):
     mult = -1
     while mult < 0:
@@ -214,6 +187,37 @@ def findClient(name, filename):
             time.sleep(0.25)
             mouse.wheel(-2)
         mult -= 1
+
+def sendTrade(name):
+    filename = r'D:\pets\name.png'
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 20)
+    pydirectinput.click()
+    time.sleep(0.5)
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\trade.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 20)
+    pydirectinput.click()
+    findClient(name, filename)
+    time.sleep(1)
+    mult = findClient(name, filename)
+    print(mult)
+    pydirectinput.moveTo(850, 310+100*mult)
+    pydirectinput.move(0, 20)
+    time.sleep(0.25)
+    pydirectinput.click()
+    time.sleep(1)
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\ok2.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 20)
+    pydirectinput.click()
+
+sendTrade("vamp")
+
+
 
 def chooseItemsForSell(petList):
     count = 0
