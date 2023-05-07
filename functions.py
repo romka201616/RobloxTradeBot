@@ -40,6 +40,32 @@ def getPetsFromDB(botName):
             connection.close()
             print("[INFO] PostgreSQL connection closed")
 
+def deleteDBRows(botName):
+    try:
+        connection = psycopg2.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=db_name
+        )
+        connection.autocommit = True
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """DELETE FROM public.order_list WHERE bot = %s""",
+                (botName,)
+            )
+
+    except Exception as _ex:
+        print("[INFO] Error while working with PostgreSQL", _ex)
+    finally:
+        if connection:
+            # cursor.close()
+            connection.close()
+            print("[INFO] PostgreSQL connection closed")
+
+deleteDBRows("another")
+
 def joinServer(link):
     webbrowser.open(link, new=2)
 
@@ -215,8 +241,6 @@ def sendTrade(name):
     pydirectinput.move(0, 20)
     pydirectinput.click()
 
-
-
 def chooseItemsForSell(petList):
     count = 0
     text = ""
@@ -274,13 +298,6 @@ def chooseItemsForSell(petList):
             y += 100
         if count == 16:
             break
-
-chooseItemsForSell(getPetsFromDB("CubeNinja228"))
-
-
-
-
-
 
 def acceptFriendRequest(username):
     webbrowser.open('https://www.roblox.com/users/friends#!/friend-requests', new=2)
