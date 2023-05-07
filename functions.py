@@ -215,17 +215,14 @@ def sendTrade(name):
     pydirectinput.move(0, 20)
     pydirectinput.click()
 
-sendTrade("vamp")
-
 
 
 def chooseItemsForSell(petList):
     count = 0
     text = ""
-    x, y = 500, 350
-    rarityList = [("basic", "dasic"), ("rare"), ("epic"), ("legen"), ("myth"), ("secret"), ("excl"), ("event")]
-    typeList = [("reg"), ("gold", "geld"), ("dark"), ("rain")]
-    tmp = list(petList)
+    x, y = 500+300, 350+200
+    rarityList = [("basic", "dasic"), ("rare",), ("epic",), ("legen",), ("myth",), ("secret",), ("excl",), ("event",)]
+    typeList = [(" ",), ("gold", "geld"), ("dark",), ("rainb", "hainb")]
 
     while len(petList) != 0:
         count+=1
@@ -252,27 +249,38 @@ def chooseItemsForSell(petList):
         print(text)
 
         deleted = False
-        for pet in tmp:
-            if text.find(pet[0].lowercase) != -1:
-                for rar in rarityList[pet[1] - 1]:
-                    if text.replace(pet[0].lower(), "").find(rar):
-                        for typ in typeList[pet[2] - 1]:
-                            if text.replace(pet[0].lower(), "").find(typ):
+        for pet in petList:
+            if text.replace("\n", " ").find(pet[0].replace("B", "D").lower()) != -1 or text.replace("\n", " ").find(pet[0].lower()) != -1:
+                for rar in rarityList[int(pet[1]) - 1]:
+                    if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(rar) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(rar) != -1:
+                        for typ in typeList[int(pet[2]) - 1]:
+                            if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(typ) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(typ) != -1:
                                 pydirectinput.move(0, 10)
                                 pydirectinput.click()
+                                time.sleep(1)
+                                print("Found")
                                 petList.remove(pet)
                                 deleted = True
                                 break
                         if deleted:
-                            deleted = False
                             break
+                if deleted:
+                    break
+
 
         x += 100
         if count % 4 == 0:
             x = 500
             y += 100
-        if count == 12:
+        if count == 16:
             break
+
+chooseItemsForSell(getPetsFromDB("CubeNinja228"))
+
+
+
+
+
 
 def acceptFriendRequest(username):
     webbrowser.open('https://www.roblox.com/users/friends#!/friend-requests', new=2)
