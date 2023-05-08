@@ -3,33 +3,31 @@ import functions
 import multiprocessing
 
 botName = "CubeNinja228"
+user = "romka201616"
 
 def getItemsFromUser(username):
     petList = functions.getPetsFromDB(botName)
     functions.acceptFriendRequest(username)
-    functions.joinServer(
-        "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
+    #functions.joinServer(
+    #    "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
     functions.sendTrade(username)
-    functions.givePets()
     functions.openChat()
     functions.writeInChat("your verification code - b16h73d28")
     functions.closeChat()
+    time.sleep(0.5)
     functions.chooseItemsForSell(petList)
-    time.sleep(1)
+    time.sleep(30)
     if functions.checkTrade():
         functions.finishTrade()
-        time.sleep(4)
+        time.sleep(1)
         functions.closeApplication()
-        time.sleep(0.5)
-        functions.removeFriend(username)
-        return True
+        functions.deleteDBRows(botName)
     else:
         functions.closeApplication()
-        return False
 
 
 def main():
-    p = multiprocessing.Process(target=getItemsFromUser, args=("Romka201616",))
+    p = multiprocessing.Process(target=getItemsFromUser, args=(user,))
     p.start()
     p.join(10 * 60)  # Timer in brackets, minutes multiplied by seconds
 

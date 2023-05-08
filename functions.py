@@ -64,8 +64,6 @@ def deleteDBRows(botName):
             connection.close()
             print("[INFO] PostgreSQL connection closed")
 
-deleteDBRows("another")
-
 def joinServer(link):
     webbrowser.open(link, new=2)
 
@@ -156,20 +154,13 @@ def closeChat():
     pydirectinput.click()
 
 def checkTrade():
-    emptyTrade = pyautogui.locateCenterOnScreen(r'D:\pets\emptyTrade.png')
-    if emptyTrade is None:
+    emptyTrade2 = pyautogui.locateCenterOnScreen(r'D:\pets\emptyTrade2.png')
+    if emptyTrade2 is None:
         closeApplication()
         return False
     return True
 
-def givePets():
-    openChat()
-    writeInChat("your verification code - b16h73d28")
-    closeChat()
-    if checkTrade():
-        print("successfull trade")
-
-def findClient(name, filename):
+def findClient2(name, filename, second):
     mult = -1
     while mult < 0:
         screen = np.array(ImageGrab.grab(bbox=(700, 290, 1050, 760)))
@@ -214,6 +205,52 @@ def findClient(name, filename):
             mouse.wheel(-2)
         mult -= 1
 
+def findClient(name, filename):
+    mult = -1
+    while mult < 0:
+        screen = np.array(ImageGrab.grab(bbox=(700, 290, 1050, 760)))
+        cv2.imwrite(filename, screen)
+        tmpstr = '#ffffff'
+        os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
+        img = Image.open(r'D:\pets\name2.png')
+        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        text = pytesseract.image_to_string(img)
+        text = text.split()
+
+        for i in range(len(text)):
+            if len(text[i]) < 3:
+                text.pop(i)
+                break
+        for i in range(len(text)):
+            if len(text[i]) < 3:
+                text.pop(i)
+                break
+        for i in range(len(text)):
+            if len(text[i]) < 3:
+                text.pop(i)
+                break
+        for i in range(len(text)):
+            if text[i] == name:
+                mult = i
+                break
+
+        print(text)
+        if mult >= 0:
+            time.sleep(30)
+            return findClient2(name, filename, True)
+        time.sleep(1)
+        pydirectinput.moveTo(850, 310)
+        pydirectinput.move(0, 10)
+        if (mult // 2) % 2 == 0:
+            mouse.wheel(2)
+            time.sleep(0.25)
+            mouse.wheel(2)
+        else:
+            mouse.wheel(-2)
+            time.sleep(0.25)
+            mouse.wheel(-2)
+        mult -= 1
+
 def sendTrade(name):
     filename = r'D:\pets\name.png'
     start = None
@@ -244,8 +281,8 @@ def sendTrade(name):
 def chooseItemsForSell(petList):
     count = 0
     text = ""
-    x, y = 500+300, 350+200
-    rarityList = [("basic", "dasic"), ("rare",), ("epic",), ("legen",), ("myth",), ("secret",), ("excl",), ("event",)]
+    x, y = 500, 350
+    rarityList = [("basic", "dasic"), ("rare", "rahe"), ("epic",), ("legen",), ("myth",), ("secret",), ("excl",), ("event", "evemt")]
     typeList = [(" ",), ("gold", "geld"), ("dark",), ("rainb", "hainb")]
 
     while len(petList) != 0:
@@ -301,7 +338,9 @@ def chooseItemsForSell(petList):
 
 def acceptFriendRequest(username):
     webbrowser.open('https://www.roblox.com/users/friends#!/friend-requests', new=2)
-    time.sleep(3)
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\ignoreAccept.png")
     count = 0
     text = ""
     username2 = username.replace("l", "I").lower()
@@ -315,6 +354,7 @@ def acceptFriendRequest(username):
         filename = r'D:\pets\tmp1.png'
         time.sleep(0.1)
         screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 210, y + 200)))
+        #pydirectinput.moveTo(x, y)
         cv2.imwrite(filename, screen)
         text = ""
         img2 = Image.open(rf"D:\pets\tmp1.png")
@@ -334,8 +374,6 @@ def acceptFriendRequest(username):
                 count = 0
     pydirectinput.moveTo(x+110, y+145)
     pydirectinput.click()
-    time.sleep(1)
-    closeApplication()
 
 def saveSuccessfullTrade():
     start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
@@ -362,7 +400,29 @@ def finishTrade():
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 10)
     pydirectinput.click()
-
+    time.sleep(0.5)
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\yes.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 10)
+    pydirectinput.click()
+    time.sleep(0.5)
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\confirm.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 10)
+    pydirectinput.click()
+    time.sleep(0.5)
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\yes.png')
+    if start is not None:
+        pydirectinput.moveTo(start[0], start[1])
+        pydirectinput.move(0, 10)
+        pydirectinput.click()
+        time.sleep(0.5)
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\ok3.png')
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r'D:\pets\ok3.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 10)
+    pydirectinput.click()
 def removeFriend(username):
     webbrowser.open(r'https://www.roblox.com/users/friends#!/friends', new=2)
     time.sleep(3)
