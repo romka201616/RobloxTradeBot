@@ -49,16 +49,28 @@ def giveItemsToUser(username):
 
     checkReady = multiprocessing.Process(target=ready, args=())
     checkReady.start()
-    checkItems = multiprocessing.Process(target=getItemsFromUser, args=(user,))
+    checkItems = multiprocessing.Process(target=functions.chooseItemsForBuy, args=(petList,))
     checkItems.start()
 
-    if functions.chooseItemsForBuy(petList):
+    while True:
+        if not checkReady.is_alive():
+            checkItems.terminate()
+            functions.closeApplication()
+            break
+
+        if not checkItems.is_alive():
+            checkReady.terminate()
+            break
+
+    if checkItems.exitcode == 0:
         functions.finishTrade()
         time.sleep(1)
         functions.saveSuccessfullTrade()
         time.sleep(0.5)
         functions.closeApplication()
         functions.deleteDBRows(botName)
+    else:
+        functions.closeApplication()
 
 def main():
     p = multiprocessing.Process(target=giveItemsToUser, args=(user,))
