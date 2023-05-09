@@ -1,7 +1,7 @@
 import time
 import functions
 import multiprocessing
-
+import pyautogui
 botName = "CubeNinja228"
 user = "romka201616"
 
@@ -20,14 +20,48 @@ def getItemsFromUser(username):
     if functions.checkTrade():
         functions.finishTrade()
         time.sleep(1)
+        functions.saveSuccessfullTrade()
+        time.sleep(0.5)
         functions.closeApplication()
         functions.deleteDBRows(botName)
     else:
         functions.closeApplication()
 
+def ready():
+    start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow.png")
+    while start is not None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow.png")
+
+def giveItemsToUser(username):
+    petList = functions.getPetsFromDB(botName)
+    functions.acceptFriendRequest(username)
+    # functions.joinServer(
+    #    "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
+    functions.sendTrade(username)
+    functions.openChat()
+    functions.writeInChat("your verification code - b16h73d28")
+    functions.closeChat()
+    time.sleep(0.5)
+
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow.png")
+
+    checkReady = multiprocessing.Process(target=ready, args=())
+    checkReady.start()
+    checkItems = multiprocessing.Process(target=getItemsFromUser, args=(user,))
+    checkItems.start()
+
+    if functions.chooseItemsForBuy(petList):
+        functions.finishTrade()
+        time.sleep(1)
+        functions.saveSuccessfullTrade()
+        time.sleep(0.5)
+        functions.closeApplication()
+        functions.deleteDBRows(botName)
 
 def main():
-    p = multiprocessing.Process(target=getItemsFromUser, args=(user,))
+    p = multiprocessing.Process(target=giveItemsToUser, args=(user,))
     p.start()
     p.join(10 * 60)  # Timer in brackets, minutes multiplied by seconds
 

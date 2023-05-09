@@ -318,7 +318,6 @@ def chooseItemsForSell(petList):
                             if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(typ) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(typ) != -1:
                                 pydirectinput.move(0, 10)
                                 pydirectinput.click()
-                                time.sleep(1)
                                 print("Found")
                                 petList.remove(pet)
                                 deleted = True
@@ -328,13 +327,71 @@ def chooseItemsForSell(petList):
                 if deleted:
                     break
 
-
         x += 100
         if count % 4 == 0:
             x = 500
             y += 100
         if count == 16:
             break
+
+def chooseItemsForBuy(petList):
+    count = 0
+    text = ""
+    x, y = 1050, 350
+    rarityList = [("basic", "dasic"), ("rare", "rahe"), ("epic",), ("legen",), ("myth",), ("secret",), ("excl",),
+                  ("event", "evemt")]
+    typeList = [(" ",), ("gold", "geld"), ("dark",), ("rainb", "hainb")]
+
+    while len(petList) != 0:
+        count += 1
+        pydirectinput.moveTo(x, y)
+        pydirectinput.move(0, 10)
+        time.sleep(0.25)
+        os.chdir(r"C:\Users\miron")
+        filename = r'D:\pets\tmp1.png'
+        time.sleep(0.1)
+        screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 250, y + 250)))
+        cv2.imwrite(filename, screen)
+        text = ""
+        img2 = Image.open(rf"D:\pets\tmp1.png")
+        img2.save(rf"D:\pets\tmp2.png")
+        reader = easyocr.Reader(["en"])
+        while len(text) < 3:
+            img = cv2.imread(rf"D:\pets\tmp2.png")
+            text = reader.readtext(img, detail=0)
+            while text.count('') != 0:
+                text.remove('')
+            img2 = img2.crop((0, 0, img2.width // 1.2, img2.height // 1.2))
+            img2.save(rf"D:\pets\tmp2.png")
+        text = ("\n".join(text)).lower()
+        print(text)
+
+        deleted = False
+        for pet in petList:
+            if text.replace("\n", " ").find(pet[0].replace("B", "D").lower()) != -1 or text.replace("\n", " ").find(
+                    pet[0].lower()) != -1:
+                for rar in rarityList[int(pet[1]) - 1]:
+                    if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(
+                            rar) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(rar) != -1:
+                        for typ in typeList[int(pet[2]) - 1]:
+                            if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(
+                                    typ) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(typ) != -1:
+                                print("Found")
+                                petList.remove(pet)
+                                deleted = True
+                                break
+                        if deleted:
+                            break
+                if deleted:
+                    break
+
+        x += 100
+        if count % 4 == 0:
+            x = 1050
+            y += 100
+        if count == 12:
+            break
+    return len(petList) == 0
 
 def acceptFriendRequest(username):
     webbrowser.open('https://www.roblox.com/users/friends#!/friend-requests', new=2)
@@ -423,6 +480,7 @@ def finishTrade():
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 10)
     pydirectinput.click()
+
 def removeFriend(username):
     webbrowser.open(r'https://www.roblox.com/users/friends#!/friends', new=2)
     time.sleep(3)
