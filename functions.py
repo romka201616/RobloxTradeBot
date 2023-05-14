@@ -411,14 +411,12 @@ def acceptFriendRequest(username):
     while text != username and text != username2 and text != username3:
         count += 1
         time.sleep(0.25)
-        os.chdir(r"C:\Users\miron")
         filename = r'D:\pets\tmp1.png'
         time.sleep(0.1)
         pydirectinput.moveTo(x+15, y+20)
         time.sleep(2)
         pydirectinput.moveTo(x+210, y+200)
         screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 210, y + 200)))
-        #pydirectinput.moveTo(x, y)
         cv2.imwrite(filename, screen)
         text = ""
         img2 = Image.open(rf"D:\pets\tmp1.png")
