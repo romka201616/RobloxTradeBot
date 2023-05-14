@@ -12,6 +12,10 @@ import mouse
 import easyocr
 import webbrowser
 import psycopg2
+from screeninfo import get_monitors
+
+resW = int(str(get_monitors()).split("width=")[1].split(",")[0])/1920
+resH = int(str(get_monitors()).split("height=")[1].split(",")[0])/1080
 
 def getPetsFromDB(botName):
     try:
@@ -410,6 +414,9 @@ def acceptFriendRequest(username):
         os.chdir(r"C:\Users\miron")
         filename = r'D:\pets\tmp1.png'
         time.sleep(0.1)
+        pydirectinput.moveTo(x+15, y+20)
+        time.sleep(2)
+        pydirectinput.moveTo(x+210, y+200)
         screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 210, y + 200)))
         #pydirectinput.moveTo(x, y)
         cv2.imwrite(filename, screen)
@@ -431,7 +438,7 @@ def acceptFriendRequest(username):
                 count = 0
     pydirectinput.moveTo(x+110, y+145)
     pydirectinput.click()
-
+acceptFriendRequest("das")
 def saveSuccessfullTrade():
     start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
     pydirectinput.moveTo(start[0], start[1])
