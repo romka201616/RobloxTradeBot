@@ -12,10 +12,7 @@ import mouse
 import easyocr
 import webbrowser
 import psycopg2
-from screeninfo import get_monitors
-
-resW = int(str(get_monitors()).split("width=")[1].split(",")[0])/1920
-resH = int(str(get_monitors()).split("height=")[1].split(",")[0])/1080
+import keyboard
 
 def getPetsFromDB(botName):
     try:
@@ -144,7 +141,7 @@ def writeInChat(verificationCode):
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 10)
     pydirectinput.click()
-    pydirectinput.write(verificationCode)
+    keyboard.write(verificationCode)
     start = pyautogui.locateCenterOnScreen(r'D:\pets\send.png')
     time.sleep(0.25)
     pydirectinput.moveTo(start[0], start[1])
@@ -164,122 +161,162 @@ def checkTrade():
         return False
     return True
 
-def findClient2(name, filename, second):
-    mult = -1
-    while mult < 0:
-        screen = np.array(ImageGrab.grab(bbox=(700, 290, 1050, 760)))
-        cv2.imwrite(filename, screen)
-        tmpstr = '#ffffff'
-        os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
-        img = Image.open(r'D:\pets\name2.png')
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-        text = pytesseract.image_to_string(img)
-        text = text.split()
+# def findClient2(name, filename, second):
+#     mult = -1
+#     while mult < 0:
+#         screen = np.array(ImageGrab.grab(bbox=(440, 320, 710, 680)))
+#         cv2.imwrite(filename, screen)
+#         tmpstr = '#ffffff'
+#         os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
+#         img = Image.open(r'D:\pets\name2.png')
+#         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#         text = pytesseract.image_to_string(img)
+#         text = text.split()
+#
+#         for i in range(len(text)):
+#             if len(text[i]) < 3:
+#                 text.pop(i)
+#                 break
+#         for i in range(len(text)):
+#             if len(text[i]) < 3:
+#                 text.pop(i)
+#                 break
+#         for i in range(len(text)):
+#             if len(text[i]) < 3:
+#                 text.pop(i)
+#                 break
+#         for i in range(len(text)):
+#             if text[i] == name:
+#                 mult = i
+#                 break
+#
+#         print(text)
+#         if mult >= 0:
+#             return mult
+#         time.sleep(1)
+#         pydirectinput.moveTo(940, 350)
+#         pydirectinput.move(0, 10)
+#         if (mult // 2) % 2 == 0:
+#             mouse.wheel(2)
+#             time.sleep(0.25)
+#             mouse.wheel(2)
+#         else:
+#             mouse.wheel(-2)
+#             time.sleep(0.25)
+#             mouse.wheel(-2)
+#         mult -= 1
+#
+# def findClient(name, filename):
+#     mult = -1
+#     while mult < 0:
+#         screen = np.array(ImageGrab.grab(bbox=(440, 320, 710, 680)))
+#         cv2.imwrite(filename, screen)
+#         tmpstr = '#ffffff'
+#         os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
+#         img = Image.open(r'D:\pets\name2.png')
+#         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#         text = pytesseract.image_to_string(img)
+#         text = text.split()
+#
+#         for i in range(len(text)):
+#             if len(text[i]) < 3:
+#                 text.pop(i)
+#                 break
+#         for i in range(len(text)):
+#             if len(text[i]) < 3:
+#                 text.pop(i)
+#                 break
+#         for i in range(len(text)):
+#             if len(text[i]) < 3:
+#                 text.pop(i)
+#                 break
+#         for i in range(len(text)):
+#             if text[i] == name:
+#                 mult = i
+#                 break
+#
+#         print(text)
+#         if mult >= 0:
+#             #time.sleep(30)
+#             return findClient2(name, filename, True)
+#         time.sleep(1)
+#         pydirectinput.moveTo(940, 350)
+#         pydirectinput.move(0, 10)
+#         if (mult // 2) % 2 == 0:
+#             mouse.wheel(2)
+#             time.sleep(0.25)
+#             mouse.wheel(2)
+#         else:
+#             mouse.wheel(-2)
+#             time.sleep(0.25)
+#             mouse.wheel(-2)
+#         mult -= 1
+#
+# def sendTrade(name):
+#     filename = r'D:\pets\name.png'
+#     start = None
+#     while start is None:
+#         start = pyautogui.locateCenterOnScreen(r'D:\pets\cat2.png')
+#     pydirectinput.moveTo(start[0], start[1])
+#     pydirectinput.move(0, 10)
+#     pydirectinput.click()
+#     time.sleep(0.5)
+#     start = pyautogui.locateCenterOnScreen(r'D:\pets\trade2.png')
+#     pydirectinput.moveTo(start[0], start[1])
+#     pydirectinput.move(0, 10)
+#     pydirectinput.click()
+#     findClient(name, filename)
+#     time.sleep(1)
+#     mult = findClient(name, filename)
+#     print(mult)
+#     pydirectinput.moveTo(600, 340 + 80 * 3)
+#     pydirectinput.move(0, 10)
+#     time.sleep(0.25)
+#     pydirectinput.click()
+#     time.sleep(1)
+#     start = pyautogui.locateCenterOnScreen(r'D:\pets\ok2.png')
+#     pydirectinput.moveTo(start[0], start[1])
+#     pydirectinput.move(0, 10)
+#     pydirectinput.click()
 
-        for i in range(len(text)):
-            if len(text[i]) < 3:
-                text.pop(i)
-                break
-        for i in range(len(text)):
-            if len(text[i]) < 3:
-                text.pop(i)
-                break
-        for i in range(len(text)):
-            if len(text[i]) < 3:
-                text.pop(i)
-                break
-        for i in range(len(text)):
-            if text[i] == name:
-                mult = i
-                break
 
-        print(text)
-        if mult >= 0:
-            return mult
-        time.sleep(1)
-        pydirectinput.moveTo(850, 310)
-        pydirectinput.move(0, 10)
-        if (mult // 2) % 2 == 0:
-            mouse.wheel(2)
-            time.sleep(0.25)
-            mouse.wheel(2)
-        else:
-            mouse.wheel(-2)
-            time.sleep(0.25)
-            mouse.wheel(-2)
-        mult -= 1
-
-def findClient(name, filename):
-    mult = -1
-    while mult < 0:
-        screen = np.array(ImageGrab.grab(bbox=(700, 290, 1050, 760)))
-        cv2.imwrite(filename, screen)
-        tmpstr = '#ffffff'
-        os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
-        img = Image.open(r'D:\pets\name2.png')
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-        text = pytesseract.image_to_string(img)
-        text = text.split()
-
-        for i in range(len(text)):
-            if len(text[i]) < 3:
-                text.pop(i)
-                break
-        for i in range(len(text)):
-            if len(text[i]) < 3:
-                text.pop(i)
-                break
-        for i in range(len(text)):
-            if len(text[i]) < 3:
-                text.pop(i)
-                break
-        for i in range(len(text)):
-            if text[i] == name:
-                mult = i
-                break
-
-        print(text)
-        if mult >= 0:
-            time.sleep(30)
-            return findClient2(name, filename, True)
-        time.sleep(1)
-        pydirectinput.moveTo(850, 310)
-        pydirectinput.move(0, 10)
-        if (mult // 2) % 2 == 0:
-            mouse.wheel(2)
-            time.sleep(0.25)
-            mouse.wheel(2)
-        else:
-            mouse.wheel(-2)
-            time.sleep(0.25)
-            mouse.wheel(-2)
-        mult -= 1
-
-def sendTrade(name):
+def sendTrade(name, atName):
     filename = r'D:\pets\name.png'
     start = None
     while start is None:
-        start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
+        start = pyautogui.locateCenterOnScreen(r'D:\pets\cat2.png')
     pydirectinput.moveTo(start[0], start[1])
-    pydirectinput.move(0, 20)
+    pydirectinput.move(0, 10)
     pydirectinput.click()
     time.sleep(0.5)
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\trade.png')
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\trade2.png')
     pydirectinput.moveTo(start[0], start[1])
-    pydirectinput.move(0, 20)
+    pydirectinput.move(0, 10)
     pydirectinput.click()
-    findClient(name, filename)
+    pydirectinput.moveTo(750, 710)
+    pydirectinput.move(0, 10)
+    pydirectinput.click()
+    keyboard.write(atName)
     time.sleep(1)
-    mult = findClient(name, filename)
-    print(mult)
-    pydirectinput.moveTo(850, 310+100*mult)
-    pydirectinput.move(0, 20)
-    time.sleep(0.25)
+    text = ['']
+    while text[0] != name:
+        screen = np.array(ImageGrab.grab(bbox=(440, 320, 710, 380)))
+        cv2.imwrite(filename, screen)
+        tmpstr = '#ffffff'
+        os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
+        img = cv2.imread(r'D:\pets\name2.png')
+        reader = easyocr.Reader(["en"])
+        text = reader.readtext(img, detail=0)
+        # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        # text = pytesseract.image_to_string(img)
+        print(text)
+    pydirectinput.moveTo(500, 350)
+    pydirectinput.move(0, 10)
     pydirectinput.click()
     time.sleep(1)
-    start = pyautogui.locateCenterOnScreen(r'D:\pets\ok2.png')
+    start = pyautogui.locateCenterOnScreen(r'D:\pets\ok4.png')
     pydirectinput.moveTo(start[0], start[1])
-    pydirectinput.move(0, 20)
+    pydirectinput.move(0, 10)
     pydirectinput.click()
 
 def chooseItemsForSell(petList):
@@ -407,7 +444,7 @@ def acceptFriendRequest(username):
     username2 = username.replace("l", "I").lower()
     username3 = username.replace("B", "D").lower()
     username = username.lower()
-    x, y = 595, 300
+    x, y = 200, 340
     while text != username and text != username2 and text != username3:
         count += 1
         time.sleep(0.25)
@@ -415,8 +452,8 @@ def acceptFriendRequest(username):
         time.sleep(0.1)
         pydirectinput.moveTo(x+15, y+20)
         time.sleep(2)
-        pydirectinput.moveTo(x+210, y+200)
-        screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 210, y + 200)))
+        pydirectinput.moveTo(x+200, y+100)
+        screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 200, y + 100)))
         cv2.imwrite(filename, screen)
         text = ""
         img2 = Image.open(rf"D:\pets\tmp1.png")
@@ -429,14 +466,14 @@ def acceptFriendRequest(username):
         if text != username and text != username2 and text != username3:
             x += 323
             if count % 3 == 0:
-                x = 595
+                x = 200
                 y += 194
             if count == 12:
                 x, y = 595, 300
                 count = 0
     pydirectinput.moveTo(x+110, y+145)
     pydirectinput.click()
-acceptFriendRequest("das")
+
 def saveSuccessfullTrade():
     start = pyautogui.locateCenterOnScreen(r'D:\pets\cat.png')
     pydirectinput.moveTo(start[0], start[1])

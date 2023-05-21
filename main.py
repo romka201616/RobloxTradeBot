@@ -5,12 +5,12 @@ import pyautogui
 botName = "CubeNinja228"
 user = "romka201616"
 
-def getItemsFromUser(username):
+def getItemsFromUser(name, username):
     petList = functions.getPetsFromDB(botName)
     functions.acceptFriendRequest(username)
     #functions.joinServer(
     #    "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
-    functions.sendTrade(username)
+    functions.sendTrade(name, username)
     functions.openChat()
     functions.writeInChat("your verification code - b16h73d28")
     functions.closeChat()
@@ -32,12 +32,12 @@ def ready():
     while start is not None:
         start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow.png")
 
-def giveItemsToUser(username):
+def giveItemsToUser(name, username):
     petList = functions.getPetsFromDB(botName)
     functions.acceptFriendRequest(username)
     # functions.joinServer(
     #    "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
-    functions.sendTrade(username)
+    functions.sendTrade(name, username)
     functions.openChat()
     functions.writeInChat("your verification code - b16h73d28")
     functions.closeChat()
