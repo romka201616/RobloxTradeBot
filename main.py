@@ -3,7 +3,8 @@ import functions
 import multiprocessing
 import pyautogui
 botName = "CubeNinja228"
-user = "romka201616"
+name = "romka201616"
+username = "romka201616"
 
 def getItemsFromUser(name, username):
     petList = functions.getPetsFromDB(botName)
@@ -28,24 +29,22 @@ def getItemsFromUser(name, username):
         functions.closeApplication()
 
 def ready():
-    start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow.png")
+    start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow2.png")
     while start is not None:
-        start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow.png")
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow2.png")
 
 def giveItemsToUser(name, username):
     petList = functions.getPetsFromDB(botName)
-    functions.acceptFriendRequest(username)
+    # functions.acceptFriendRequest(username)
     # functions.joinServer(
     #    "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
-    functions.sendTrade(name, username)
-    functions.openChat()
-    functions.writeInChat("your verification code - b16h73d28")
-    functions.closeChat()
-    time.sleep(0.5)
-
+    # functions.sendTrade(name, username)
+    # functions.openChat()
+    # functions.writeInChat("Your verification code is: b16H7g3D28")
+    # functions.closeChat()
     start = None
     while start is None:
-        start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow.png")
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow2.png")
 
     checkReady = multiprocessing.Process(target=ready, args=())
     checkReady.start()
@@ -73,7 +72,7 @@ def giveItemsToUser(name, username):
         functions.closeApplication()
 
 def main():
-    p = multiprocessing.Process(target=giveItemsToUser, args=(user,))
+    p = multiprocessing.Process(target=giveItemsToUser, args=(name, username,))
     p.start()
     p.join(10 * 60)  # Timer in brackets, minutes multiplied by seconds
 
