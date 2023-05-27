@@ -68,7 +68,45 @@ def deleteDBRows(botName):
 def joinServer(link):
     webbrowser.open(link, new=2)
 
-#Take screanshot and get cliendName
+def blockUnblock():
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\3dots.png")
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 5)
+    pydirectinput.click()
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\blockUser.png")
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(10, 0)
+    pydirectinput.click()
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\block.png")
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(10, 0)
+    pydirectinput.click()
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\3dots.png")
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 5)
+    pydirectinput.click()
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\unblockUser.png")
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 5)
+    pydirectinput.click()
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\unblock.png")
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 5)
+    pydirectinput.click()
+
+
 def getTradeSenderName():
     os.chdir(r"C:\Users\billy")
 
@@ -542,7 +580,13 @@ def acceptFriendRequest(username):
             if count == 12:
                 x, y = 595, 300
                 count = 0
-    pydirectinput.moveTo(x+110, y+145)
+    pydirectinput.moveTo(x+70, y)
+    pydirectinput.click()
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r"D:\pets\acceptFriend.png")
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 10)
     pydirectinput.click()
 
 def saveSuccessfullTrade():

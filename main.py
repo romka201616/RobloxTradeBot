@@ -35,13 +35,13 @@ def ready():
 
 def giveItemsToUser(name, username):
     petList = functions.getPetsFromDB(botName)
-    # functions.acceptFriendRequest(username)
-    # functions.joinServer(
-    #    "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
-    # functions.sendTrade(name, username)
-    # functions.openChat()
-    # functions.writeInChat("Your verification code is: b16H7g3D28")
-    # functions.closeChat()
+    functions.acceptFriendRequest(username)
+    functions.joinServer(
+       "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
+    functions.sendTrade(name, username)
+    functions.openChat()
+    functions.writeInChat("Your verification code is: b16H7g3D28")
+    functions.closeChat()
     start = None
     while start is None:
         start = pyautogui.locateCenterOnScreen(r"D:\pets\arrow2.png")
@@ -68,17 +68,22 @@ def giveItemsToUser(name, username):
         time.sleep(0.5)
         functions.closeApplication()
         functions.deleteDBRows(botName)
+        functions.blockUnblock()
     else:
         functions.closeApplication()
+        functions.blockUnblock()
 
 def main():
-    p = multiprocessing.Process(target=giveItemsToUser, args=(name, username,))
-    p.start()
-    p.join(10 * 60)  # Timer in brackets, minutes multiplied by seconds
+    while True:
+        while functions.getPetsFromDB(botName) == ([]):
+            functions.getPetsFromDB(botName)
+        p = multiprocessing.Process(target=giveItemsToUser, args=(name, username,))
+        p.start()
+        p.join(10 * 60)  # Timer in brackets, minutes multiplied by seconds
 
-    if p.is_alive():
-        p.terminate()
-        p.join()
+        if p.is_alive():
+            p.terminate()
+            p.join()
 
 
 if __name__ == '__main__':
