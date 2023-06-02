@@ -93,6 +93,7 @@ def blockUnblock():
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 5)
     pydirectinput.click()
+    time.sleep(2)
     start = None
     while start is None:
         start = pyautogui.locateCenterOnScreen(r"D:\pets\unblockUser.png")
@@ -337,7 +338,7 @@ def sendTrade(name, atName):
     keyboard.write(atName)
     time.sleep(1)
     text = ['']
-    while text[0] != name:
+    while text[0] != name and text[0].replace("?", "2") != name:
         screen = np.array(ImageGrab.grab(bbox=(440, 320, 710, 380)))
         cv2.imwrite(filename, screen)
         tmpstr = '#ffffff'
@@ -345,8 +346,9 @@ def sendTrade(name, atName):
         img = cv2.imread(r'D:\pets\name2.png')
         reader = easyocr.Reader(["en"])
         text = reader.readtext(img, detail=0)
+
     time.sleep(30)
-    while text[0] != name:
+    while text[0] != name and text[0].replace("?", "2") != name:
         screen = np.array(ImageGrab.grab(bbox=(440, 320, 710, 380)))
         cv2.imwrite(filename, screen)
         tmpstr = '#ffffff'
@@ -552,17 +554,15 @@ def acceptFriendRequest(username):
     text = ""
     username2 = username.replace("l", "I").lower()
     username3 = username.replace("B", "D").lower()
+    username4 = username.replace("0", "o").lower()
     username = username.lower()
-    x, y = 200, 340
-    while text != username and text != username2 and text != username3:
+    x, y = 225, 320
+    while True:
         count += 1
         time.sleep(0.25)
         filename = r'D:\pets\tmp1.png'
         time.sleep(0.1)
-        pydirectinput.moveTo(x+15, y+20)
-        time.sleep(2)
-        pydirectinput.moveTo(x+200, y+100)
-        screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 200, y + 100)))
+        screen = np.array(ImageGrab.grab(bbox=(x, y, x + 215, y + 80)))
         cv2.imwrite(filename, screen)
         text = ""
         img2 = Image.open(rf"D:\pets\tmp1.png")
@@ -572,15 +572,19 @@ def acceptFriendRequest(username):
         text = reader.readtext(img, detail=0)
         text = text[1].replace("@", "").lower()
         print(text)
-        if text != username and text != username2 and text != username3:
-            x += 323
-            if count % 3 == 0:
-                x = 200
-                y += 194
-            if count == 12:
-                x, y = 595, 300
-                count = 0
-    pydirectinput.moveTo(x+70, y)
+
+        if text == username or text == username2 or text == username3 or text == username4:
+            break
+
+        x += 323
+        if count % 3 == 0:
+            x = 200
+            y += 194
+        if count == 12:
+            x, y = 595, 300
+            count = 0
+
+    pydirectinput.moveTo(x+70, y+15)
     pydirectinput.click()
     start = None
     while start is None:
@@ -677,3 +681,6 @@ def removeFriend(username):
 
 def closeApplication():
     pyautogui.hotkey("altleft", "f4")
+
+def closeBrowserTab():
+    pyautogui.hotkey("ctrlleft", "w")
