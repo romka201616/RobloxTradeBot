@@ -165,8 +165,13 @@ def visitToAccept():
 
 def openChat():
     start = None
-    while start is None:
-        start = pyautogui.locateCenterOnScreen(r'D:\pets\chat2.png')
+    while True:
+        if pyautogui.locateCenterOnScreen(r'D:\pets\chat2.png') != None:
+            start = pyautogui.locateCenterOnScreen(r'D:\pets\chat2.png')
+            break
+        if pyautogui.locateCenterOnScreen(r'D:\pets\chat.png') != None:
+            start = pyautogui.locateCenterOnScreen(r'D:\pets\chat.png')
+            break
     time.sleep(0.25)
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 10)
@@ -346,6 +351,8 @@ def sendTrade(name, atName):
         img = cv2.imread(r'D:\pets\name2.png')
         reader = easyocr.Reader(["en"])
         text = reader.readtext(img, detail=0)
+        if text == []:
+            text = ['']
 
     time.sleep(30)
     while text[0] != name and text[0].replace("?", "2") != name:
@@ -364,6 +371,7 @@ def sendTrade(name, atName):
     pydirectinput.moveTo(start[0], start[1])
     pydirectinput.move(0, 10)
     pydirectinput.click()
+
 
 # def chooseItemsForSell(petList):
 #     count = 0
@@ -556,6 +564,7 @@ def acceptFriendRequest(username):
     username3 = username.replace("B", "D").lower()
     username4 = username.replace("0", "o").lower()
     username = username.lower()
+    time.sleep(5)
     x, y = 225, 320
     while True:
         count += 1
@@ -571,7 +580,6 @@ def acceptFriendRequest(username):
         reader = easyocr.Reader(["en"])
         text = reader.readtext(img, detail=0)
         text = text[1].replace("@", "").lower()
-        print(text)
 
         if text == username or text == username2 or text == username3 or text == username4:
             break
@@ -584,7 +592,7 @@ def acceptFriendRequest(username):
             x, y = 595, 300
             count = 0
 
-    pydirectinput.moveTo(x+70, y+15)
+    pydirectinput.moveTo(x+80, y+15)
     pydirectinput.click()
     start = None
     while start is None:

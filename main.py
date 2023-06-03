@@ -9,24 +9,28 @@ username = "romka201616"
 def getItemsFromUser(name, username):
     petList = functions.getPetsFromDB(botName)
     functions.acceptFriendRequest(username)
-    #functions.joinServer(
-    #    "https://www.roblox.com/games/6516141723?privateServerLinkCode=52365473118566909669998398571053")
+    functions.joinServer(
+        "https://www.roblox.com/games/6284583030?privateServerLinkCode=29261471894633459457020891970579")
     functions.sendTrade(name, username)
     functions.openChat()
-    functions.writeInChat("your verification code - b16h73d28")
+    functions.writeInChat("Your verification code is: b16H7g3D28")
     functions.closeChat()
-    time.sleep(0.5)
+
     functions.chooseItemsForSell(petList)
-    time.sleep(30)
-    if functions.checkTrade():
-        functions.finishTrade()
-        time.sleep(1)
-        functions.saveSuccessfullTrade()
-        time.sleep(0.5)
-        functions.closeApplication()
-        functions.deleteDBRows(botName)
-    else:
-        functions.closeApplication()
+
+    functions.openChat()
+    functions.writeInChat('Trade is ready. Press "ready" button to continue.')
+    functions.closeChat()
+
+    functions.finishTrade()
+    time.sleep(1)
+    functions.saveSuccessfullTrade()
+    time.sleep(0.5)
+    functions.closeApplication()
+    functions.deleteDBRows(botName)
+    functions.closeBrowserTab()
+    functions.blockUnblock()
+    functions.closeBrowserTab()
 
 def ready():
     while True:
@@ -61,6 +65,7 @@ def giveItemsToUser(name, username):
     functions.deleteDBRows(botName)
     functions.closeBrowserTab()
     functions.blockUnblock()
+    functions.closeBrowserTab()
 
 def main():
     while True:
