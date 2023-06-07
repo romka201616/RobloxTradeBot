@@ -16,21 +16,18 @@ def getItemsFromUser(name, username):
     functions.writeInChat("Your verification code is: b16H7g3D28")
     functions.closeChat()
 
-    functions.chooseItemsForSell(petList)
+    functions.chooseItemsForBuy()
 
-    functions.openChat()
-    functions.writeInChat('Trade is ready. Press "ready" button to continue.')
-    functions.closeChat()
 
     functions.finishTrade()
     time.sleep(1)
     functions.saveSuccessfullTrade()
     time.sleep(0.5)
     functions.closeApplication()
-    functions.deleteDBRows(botName)
     functions.closeBrowserTab()
     functions.blockUnblock()
     functions.closeBrowserTab()
+    functions.deleteDBRows(botName)
 
 def ready():
     while True:

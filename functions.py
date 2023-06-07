@@ -8,7 +8,6 @@ from config import host, user, password, db_name
 import pyautogui
 import time
 import pydirectinput
-import mouse
 import easyocr
 import webbrowser
 import psycopg2
@@ -206,124 +205,6 @@ def checkTrade():
         return False
     return True
 
-# def findClient2(name, filename, second):
-#     mult = -1
-#     while mult < 0:
-#         screen = np.array(ImageGrab.grab(bbox=(440, 320, 710, 680)))
-#         cv2.imwrite(filename, screen)
-#         tmpstr = '#ffffff'
-#         os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
-#         img = Image.open(r'D:\pets\name2.png')
-#         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-#         text = pytesseract.image_to_string(img)
-#         text = text.split()
-#
-#         for i in range(len(text)):
-#             if len(text[i]) < 3:
-#                 text.pop(i)
-#                 break
-#         for i in range(len(text)):
-#             if len(text[i]) < 3:
-#                 text.pop(i)
-#                 break
-#         for i in range(len(text)):
-#             if len(text[i]) < 3:
-#                 text.pop(i)
-#                 break
-#         for i in range(len(text)):
-#             if text[i] == name:
-#                 mult = i
-#                 break
-#
-#         print(text)
-#         if mult >= 0:
-#             return mult
-#         time.sleep(1)
-#         pydirectinput.moveTo(940, 350)
-#         pydirectinput.move(0, 10)
-#         if (mult // 2) % 2 == 0:
-#             mouse.wheel(2)
-#             time.sleep(0.25)
-#             mouse.wheel(2)
-#         else:
-#             mouse.wheel(-2)
-#             time.sleep(0.25)
-#             mouse.wheel(-2)
-#         mult -= 1
-#
-# def findClient(name, filename):
-#     mult = -1
-#     while mult < 0:
-#         screen = np.array(ImageGrab.grab(bbox=(440, 320, 710, 680)))
-#         cv2.imwrite(filename, screen)
-#         tmpstr = '#ffffff'
-#         os.system(rf'convert D:\pets\name.png -fill black +opaque {tmpstr} D:\pets\name2.png')
-#         img = Image.open(r'D:\pets\name2.png')
-#         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-#         text = pytesseract.image_to_string(img)
-#         text = text.split()
-#
-#         for i in range(len(text)):
-#             if len(text[i]) < 3:
-#                 text.pop(i)
-#                 break
-#         for i in range(len(text)):
-#             if len(text[i]) < 3:
-#                 text.pop(i)
-#                 break
-#         for i in range(len(text)):
-#             if len(text[i]) < 3:
-#                 text.pop(i)
-#                 break
-#         for i in range(len(text)):
-#             if text[i] == name:
-#                 mult = i
-#                 break
-#
-#         print(text)
-#         if mult >= 0:
-#             #time.sleep(30)
-#             return findClient2(name, filename, True)
-#         time.sleep(1)
-#         pydirectinput.moveTo(940, 350)
-#         pydirectinput.move(0, 10)
-#         if (mult // 2) % 2 == 0:
-#             mouse.wheel(2)
-#             time.sleep(0.25)
-#             mouse.wheel(2)
-#         else:
-#             mouse.wheel(-2)
-#             time.sleep(0.25)
-#             mouse.wheel(-2)
-#         mult -= 1
-#
-# def sendTrade(name):
-#     filename = r'D:\pets\name.png'
-#     start = None
-#     while start is None:
-#         start = pyautogui.locateCenterOnScreen(r'D:\pets\cat2.png')
-#     pydirectinput.moveTo(start[0], start[1])
-#     pydirectinput.move(0, 10)
-#     pydirectinput.click()
-#     time.sleep(0.5)
-#     start = pyautogui.locateCenterOnScreen(r'D:\pets\trade2.png')
-#     pydirectinput.moveTo(start[0], start[1])
-#     pydirectinput.move(0, 10)
-#     pydirectinput.click()
-#     findClient(name, filename)
-#     time.sleep(1)
-#     mult = findClient(name, filename)
-#     print(mult)
-#     pydirectinput.moveTo(600, 340 + 80 * 3)
-#     pydirectinput.move(0, 10)
-#     time.sleep(0.25)
-#     pydirectinput.click()
-#     time.sleep(1)
-#     start = pyautogui.locateCenterOnScreen(r'D:\pets\ok2.png')
-#     pydirectinput.moveTo(start[0], start[1])
-#     pydirectinput.move(0, 10)
-#     pydirectinput.click()
-
 def sendTrade(name, atName):
     filename = r'D:\pets\name.png'
     start = None
@@ -372,72 +253,26 @@ def sendTrade(name, atName):
     pydirectinput.move(0, 10)
     pydirectinput.click()
 
-
-# def chooseItemsForSell(petList):
-#     count = 0
-#     text = ""
-#     x, y = 500, 350
-#     rarityList = [("basic", "dasic"), ("rare", "rahe"), ("epic",), ("legen",), ("myth",), ("secret",), ("excl",), ("event", "evemt")]
-#     typeList = [(" ",), ("gold", "geld"), ("dark",), ("rainb", "hainb")]
-#
-#     while len(petList) != 0:
-#         count+=1
-#         pydirectinput.moveTo(x, y)
-#         pydirectinput.move(0, 10)
-#         time.sleep(0.25)
-#         os.chdir(r"C:\Users\miron")
-#         filename = r'D:\pets\tmp1.png'
-#         time.sleep(0.1)
-#         screen = np.array(ImageGrab.grab(bbox=(x+15, y+20, x+250, y+250)))
-#         cv2.imwrite(filename, screen)
-#         text = ""
-#         img2 = Image.open(rf"D:\pets\tmp1.png")
-#         img2.save(rf"D:\pets\tmp2.png")
-#         reader = easyocr.Reader(["en"])
-#         while len(text) < 3:
-#             img = cv2.imread(rf"D:\pets\tmp2.png")
-#             text = reader.readtext(img, detail=0)
-#             while text.count('') != 0:
-#                 text.remove('')
-#             img2 = img2.crop((0, 0, img2.width//1.2, img2.height//1.2))
-#             img2.save(rf"D:\pets\tmp2.png")
-#         text = ("\n".join(text)).lower()
-#         print(text)
-#
-#         deleted = False
-#         for pet in petList:
-#             if text.replace("\n", " ").find(pet[0].replace("B", "D").lower()) != -1 or text.replace("\n", " ").find(pet[0].lower()) != -1:
-#                 for rar in rarityList[int(pet[1]) - 1]:
-#                     if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(rar) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(rar) != -1:
-#                         for typ in typeList[int(pet[2]) - 1]:
-#                             if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(typ) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(typ) != -1:
-#                                 pydirectinput.move(0, 10)
-#                                 pydirectinput.click()
-#                                 print("Found")
-#                                 petList.remove(pet)
-#                                 deleted = True
-#                                 break
-#                         if deleted:
-#                             break
-#                 if deleted:
-#                     break
-#
-#         x += 100
-#         if count % 4 == 0:
-#             x = 500
-#             y += 100
-#         if count == 16:
-#             break
-
-def chooseItemsForBuy(petList):
+def chooseItemsForBuy():
+    start = None
+    while start is None:
+        start = pyautogui.locateCenterOnScreen(r'D:\pets\changeView.png')
+    pydirectinput.moveTo(start[0], start[1])
+    pydirectinput.move(0, 5)
+    pydirectinput.click()
     count = 0
     text = ""
-    x, y = 1050, 350
+    x, y = 710, 360
     rarityList = [("basic", "dasic"), ("rare", "rahe"), ("epic",), ("legen",), ("myth",), ("secret",), ("excl",),
                   ("event", "evemt")]
     typeList = [(" ",), ("gold", "geld"), ("dark",), ("rainb", "hainb")]
 
-    while len(petList) != 0:
+    rarList = ["basic", "rare", "epic", "legendary", "mythical", "secret", "exclusive", "event"]
+    typList = ["regular", "gold", "dark matter", "rainbow"]
+
+    petList = []
+
+    while True:
         count += 1
         pydirectinput.moveTo(x, y)
         pydirectinput.move(0, 10)
@@ -451,42 +286,71 @@ def chooseItemsForBuy(petList):
         img2 = Image.open(rf"D:\pets\tmp1.png")
         img2.save(rf"D:\pets\tmp2.png")
         reader = easyocr.Reader(["en"])
+
+        flag = False
         while len(text) < 3:
             img = cv2.imread(rf"D:\pets\tmp2.png")
+            if reader.readtext(img, detail=0) == None:
+                flag = True
+                break
             text = reader.readtext(img, detail=0)
             while text.count('') != 0:
                 text.remove('')
             img2 = img2.crop((0, 0, img2.width // 1.2, img2.height // 1.2))
             img2.save(rf"D:\pets\tmp2.png")
+
+        if flag:
+            break
+
         text = ("\n".join(text)).lower()
         print(text)
+        text = text.replace("\n", " ")
 
-        deleted = False
-        for pet in petList:
-            if text.replace("\n", " ").find(pet[0].replace("B", "D").lower()) != -1 or text.replace("\n", " ").find(
-                    pet[0].lower()) != -1:
-                for rar in rarityList[int(pet[1]) - 1]:
-                    if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(
-                            rar) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(rar) != -1:
-                        for typ in typeList[int(pet[2]) - 1]:
-                            if text.replace("\n", " ").replace(pet[0].replace("B", "D").lower(), "").find(
-                                    typ) != -1 or text.replace("\n", " ").replace(pet[0].lower(), "").find(typ) != -1:
-                                print("Found")
-                                petList.remove(pet)
-                                deleted = True
+        tmpIndex = -1
+        petRarity = ''
+        petType = ''
+        stop = False
+
+        for rarindex, rarity in enumerate(rarityList):
+            for rar in rarity:
+                if text.find(rar) != -1:
+                    tmpIndex = rarindex
+                    petRarity = rarList[rarindex]
+
+                    for typindex, type in enumerate(typeList):
+                        for typ in type:
+                            if text.find(typ) != -1:
+                                petType = typList[typindex]
+                                stop = True
                                 break
-                        if deleted:
+                        if stop:
                             break
-                if deleted:
+                if stop:
                     break
+            if stop:
+                break
 
-        x += 100
-        if count % 4 == 0:
-            x = 1050
-            y += 100
+
+
+        name = text[:tmpIndex]
+        last_space_index = name.rfind(' ')  # ищем индекс последнего пробела
+        if last_space_index != -1:  # если пробел найден
+            second_last_space_index = name.rfind(' ', 0, last_space_index)  # ищем индекс второго пробела с конца
+            if second_last_space_index != -1:  # если второй пробел найден
+                name = name[:second_last_space_index]
+
+        petList.append((name, petRarity, petType))
+        print(petList)
+
+        x += 60
+        if count % 5 == 0:
+            x = 710
+            y += 60
         if count == 12:
             break
-    return len(petList) == 0
+    return petList
+
+chooseItemsForBuy()
 
 def chooseItemsForSell(petList):
     text = ""
