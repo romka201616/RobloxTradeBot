@@ -290,21 +290,30 @@ def chooseItemsForBuy():
         flag = False
         while len(text) < 3:
             img = cv2.imread(rf"D:\pets\tmp2.png")
-            if reader.readtext(img, detail=0) == None:
+            try:
+                reader.readtext(img, detail=0)
+            except:
                 flag = True
+                continue
+            if flag:
                 break
             text = reader.readtext(img, detail=0)
             while text.count('') != 0:
                 text.remove('')
             img2 = img2.crop((0, 0, img2.width // 1.2, img2.height // 1.2))
-            img2.save(rf"D:\pets\tmp2.png")
+            if img2.width == 0 or img2.height == 0:
+                break
+            try:
+                img2.save(rf"D:\pets\tmp2.png")
+            except:
+                continue
 
         if flag:
             break
 
         text = ("\n".join(text)).lower()
-        print(text)
         text = text.replace("\n", " ")
+        print(text)
 
         tmpIndex = -1
         petRarity = ''
@@ -314,15 +323,17 @@ def chooseItemsForBuy():
         for rarindex, rarity in enumerate(rarityList):
             for rar in rarity:
                 if text.find(rar) != -1:
-                    tmpIndex = rarindex
+                    tmpIndex = text.find(rar)
                     petRarity = rarList[rarindex]
-
+                    temp = False
                     for typindex, type in enumerate(typeList):
                         for typ in type:
                             if text.find(typ) != -1:
                                 petType = typList[typindex]
-                                stop = True
-                                break
+                                if temp:
+                                    stop = True
+                                    break
+                                temp = True
                         if stop:
                             break
                 if stop:
@@ -346,7 +357,7 @@ def chooseItemsForBuy():
         if count % 5 == 0:
             x = 710
             y += 60
-        if count == 12:
+        if count == 20:
             break
     return petList
 
