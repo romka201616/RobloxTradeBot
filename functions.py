@@ -268,20 +268,42 @@ def chooseItemsForBuy():
     typeList = [(" ",), ("gold", "geld"), ("dark",), ("rainb", "hainb")]
 
     rarList = ["basic", "rare", "epic", "legendary", "mythical", "secret", "exclusive", "event"]
-    typList = ["regular", "gold", "dark matter", "rainbow"]
+    typList = ["regular", "golden", "dark matter", "rainbow"]
 
     petList = []
 
     while True:
         count += 1
         pydirectinput.moveTo(x, y)
-        pydirectinput.move(0, 10)
-        time.sleep(0.25)
+        pydirectinput.move(0, 1)
         os.chdir(r"C:\Users\miron")
         filename = r'D:\pets\tmp1.png'
-        time.sleep(0.1)
-        screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 250, y + 250)))
-        cv2.imwrite(filename, screen)
+        time.sleep(0.5)
+        screen = np.array(ImageGrab.grab(bbox=(x+5, y+5, x + 250, y + 300)))
+
+        top_left = (10, 10)
+
+        # Ищем верхнюю правую точку области с цветом (59, 177, 252)
+        top_right = None
+        for x1 in range(top_left[0]+10, screen.shape[1]):
+            if tuple(screen[top_left[1]][x1]) == (59, 177, 252):
+                top_right = (x1 - 1, top_left[1])
+                break
+
+        # Ищем нижнюю правую точку области с цветом (59, 177, 252)
+        bottom_right = None
+        for y1 in range(top_right[1]+10, screen.shape[0]):
+            if tuple(screen[y1][top_right[0]]) == (59, 177, 252):
+                bottom_right = (top_right[0], y1 - 1)
+                break
+
+        # Обрезаем изображение по найденным границам
+        cropped_screen = screen[top_left[1]:bottom_right[1] + 1, top_left[0]:bottom_right[0] + 1]
+
+        # Преобразуем массив numpy в изображение и сохраняем его
+        cropped_image = Image.fromarray(cropped_screen)
+
+        cv2.imwrite(filename, cropped_screen)
         text = ""
         img2 = Image.open(rf"D:\pets\tmp1.png")
         img2.save(rf"D:\pets\tmp2.png")
@@ -310,7 +332,6 @@ def chooseItemsForBuy():
 
         if flag:
             break
-
         text = ("\n".join(text)).lower()
         text = text.replace("\n", " ")
         print(text)
@@ -385,7 +406,16 @@ def chooseItemsForSell(petList):
                 filename = r'D:\pets\tmp1.png'
                 time.sleep(0.1)
                 screen = np.array(ImageGrab.grab(bbox=(x + 15, y + 20, x + 250, y + 250)))
-                cv2.imwrite(filename, screen)
+                # Ищем индексы пикселей с нужным цветом
+                indices = np.where(np.all(screen == [59, 177, 252], axis=-1))
+
+                # Находим координаты самого верхнего левого и правого нижнего пикселя
+                min_x, min_y = np.min(indices, axis=1)
+                max_x, max_y = np.max(indices, axis=1)
+
+                # Обрезаем скриншот по найденным координатам
+                cropped_screen = screen[min_y:max_y + 1, min_x:max_x + 1]
+                cv2.imwrite(filename, cropped_screen)
                 text = ""
                 img2 = Image.open(rf"D:\pets\tmp1.png")
                 img2.save(rf"D:\pets\tmp2.png")
