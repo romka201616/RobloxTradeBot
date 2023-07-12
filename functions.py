@@ -12,6 +12,8 @@ import easyocr
 import webbrowser
 import psycopg2
 import keyboard
+import tensorflow as tf
+import keras_ocr
 
 def getPetsFromDB(botName):
     try:
@@ -253,6 +255,26 @@ def sendTrade(name, atName):
     pydirectinput.move(0, 10)
     pydirectinput.click()
 
+def cropPicture(image):
+    # выделяем рамку
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edged = cv2.Canny(gray, 30, 200)
+    contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+    # находим рамку с наибольшей площадью
+    max_area = 0
+    max_contour = None
+    for contour in contours:
+        area = cv2.contourArea(contour)
+        if area > max_area:
+            max_area = area
+            max_contour = contour
+
+    # вырезаем рамку из изображения
+    x, y, w, h = cv2.boundingRect(max_contour)
+    frame = image[y:y+h, x:x+w]
+    cv2.imwrite('thresh.jpg', frame)
+
 def chooseItemsForBuy():
     start = None
     while start is None:
@@ -280,61 +302,29 @@ def chooseItemsForBuy():
         filename = r'D:\pets\tmp1.png'
         time.sleep(0.5)
         screen = np.array(ImageGrab.grab(bbox=(x+5, y+5, x + 250, y + 300)))
+        img = Image.fromarray(screen)
+        img.save('screenshot.png')
 
-        top_left = (10, 10)
+        image = cv2.imread('screenshot.png')
+        cropPicture(image)
+        # Изменённое изображение сохраняется в 'thresh.jpg'
 
-        # Ищем верхнюю правую точку области с цветом (59, 177, 252)
-        top_right = None
-        for x1 in range(top_left[0]+10, screen.shape[1]):
-            if tuple(screen[top_left[1]][x1]) == (59, 177, 252):
-                top_right = (x1 - 1, top_left[1])
-                break
+        # Получите список всех файлов в папке "train"
+        files = os.listdir('thresh.jpg')
 
-        # Ищем нижнюю правую точку области с цветом (59, 177, 252)
-        bottom_right = None
-        for y1 in range(top_right[1]+10, screen.shape[0]):
-            if tuple(screen[y1][top_right[0]]) == (59, 177, 252):
-                bottom_right = (top_right[0], y1 - 1)
-                break
+        # Создайте экземпляр пайплайна Keras-OCR
+        pipeline = keras_ocr.pipeline.Pipeline()
 
-        # Обрезаем изображение по найденным границам
-        cropped_screen = screen[top_left[1]:bottom_right[1] + 1, top_left[0]:bottom_right[0] + 1]
+        # Считайте изображение и преобразуйте его в RGB
+        image = keras_ocr.tools.read('thresh.jpg')
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        # Преобразуем массив numpy в изображение и сохраняем его
-        cropped_image = Image.fromarray(cropped_screen)
+        # Примените Keras-OCR
+        predictions = pipeline.recognize([image])[0]
 
-        cv2.imwrite(filename, cropped_screen)
-        text = ""
-        img2 = Image.open(rf"D:\pets\tmp1.png")
-        img2.save(rf"D:\pets\tmp2.png")
-        reader = easyocr.Reader(["en"])
-
-        flag = False
-        while len(text) < 3:
-            img = cv2.imread(rf"D:\pets\tmp2.png")
-            try:
-                reader.readtext(img, detail=0)
-            except:
-                flag = True
-                continue
-            if flag:
-                break
-            text = reader.readtext(img, detail=0)
-            while text.count('') != 0:
-                text.remove('')
-            img2 = img2.crop((0, 0, img2.width // 1.2, img2.height // 1.2))
-            if img2.width == 0 or img2.height == 0:
-                break
-            try:
-                img2.save(rf"D:\pets\tmp2.png")
-            except:
-                continue
-
-        if flag:
-            break
-        text = ("\n".join(text)).lower()
-        text = text.replace("\n", " ")
-        print(text)
+        # Выведите результат для каждого изображения
+        text, box = predictions
+        print(f"Detected text: {text}")
 
         tmpIndex = -1
         petRarity = ''
